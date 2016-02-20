@@ -1,6 +1,6 @@
 define(function (require) {
 
-	var headlineTitles = ["Front End Developer", "Digital Artist", "Junior Graphic Designer"];
+	var headlineTitles = ["Front End Developer", "Digital Artist", "Graphic Designer"];
 	var numOfHeadlines = headlineTitles.length;
 
 	var style = document.createElement("style");

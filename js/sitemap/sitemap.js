@@ -82,8 +82,7 @@ define(function (require) {
 		"}",
 		".navigationItem {",
 			"display: inline-block;",
-			"padding: 10px;",
-			"margin: 0px 10px 0px 10px;",
+			"padding: 10px 20px;",
 			"font: 16px 'Webly Sleek';",
 			"text-transform: uppercase;",
 			"font-weight: lighter;",
@@ -93,11 +92,30 @@ define(function (require) {
 			"opacity: 0.6;",
 			"transition: 0.5s;",
 			"-webkit-transition: 0.5s;",
+			"overflow: hidden;",
 		"}",
-		".navigationItemSelected, .navigationItem:hover {",
+		".navigationItemLine {",
+			"position: relative;",
+			"height: 2px;",
+			"width: 100%;",
+			"background: white none repeat scroll 0% 0%;",
+			"opacity: 0.6;",
+			"left: -100%;",
+			"margin-left: -20px;",
+			"transition: 0.5s;",
+			"-webkit-transition: 0.5s;",
+		"}",
+		".navigationItemSelected {",
+			"color: black;",
+			"background: white;",
+		"}",
+		".navigationItem:hover {",
 			"opacity: 1;",
 		"}",
-
+		".navigationItem:hover .navigationItemLine {",
+			"margin-left: 20px;",
+			"left: 100%;",
+		"}",
 		"@media screen and (max-width: 750px) {",
 			"#mainNavigationContainer {",
 				"position: absolute;",
@@ -115,6 +133,9 @@ define(function (require) {
 			"}",
 			"#mobileNavigationButton {",
 				"display: block;",
+			"}",
+			".navigationItem {",
+				"width: 120px;",
 			"}",
 		"}",
 		"@media screen and (max-width: 350px) {",
@@ -194,7 +215,6 @@ define(function (require) {
 		contentContainer.appendChild(contentPage);
 
 		var navigationItem = document.createElement("div");
-
 		navigationItem.className = " navigationItem";
 		navigationItem.id = "navigationItem_" + page_;
 		navigationItem.innerHTML = page;
@@ -204,6 +224,10 @@ define(function (require) {
 				changeToPage(this.id.replace("navigationItem_", ""));
 			}
 		}, false);
+
+		var navigationItemLine = document.createElement("div");
+		navigationItemLine.className = " navigationItemLine";
+		navigationItem.appendChild(navigationItemLine)
 
 		mainNavigationContainer.appendChild(navigationItem);
 	}
