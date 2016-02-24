@@ -1,5 +1,7 @@
 define(function (require) {
 
+	var classmanager = require("../classmanager");
+
 	var sitemap = {};
 
 	var pages = [ 
@@ -128,6 +130,9 @@ define(function (require) {
 				"background: rgba(0, 0, 0, 0.8);",
 				"text-align: left;",
 			"}",
+			"#mainNavigationContainer.expanded {",
+				"left: 50px;",
+			"}",
 			"#contentContainer {",
 				"top: 50px;",
 			"}",
@@ -145,11 +150,11 @@ define(function (require) {
 
 	var mainNavigationContainer = document.createElement("div");
 	mainNavigationContainer.id = "mainNavigationContainer";
-	mainNavigationContainer.className = " unselectable";
+	mainNavigationContainer.className = "unselectable";
 
 	var contentContainer = document.createElement("div");
 	contentContainer.id = "contentContainer";
-	contentContainer.className = " hidden";
+	contentContainer.className = "hidden";
 
 	var contentTop = document.createElement("div");
 	contentTop.id = "contentTop";
@@ -165,7 +170,7 @@ define(function (require) {
 				sitemap.onContentShow();
 			}
 
-			contentContainer.className = contentContainer.className.replace(" hidden", "");
+			classmanager.removeClass(contentContainer, "hidden");
 
 			if (previousPage !== page) {
 
@@ -174,15 +179,15 @@ define(function (require) {
 					var previousNavigationItem = document.getElementById("navigationItem_" + previousPage);
 					var previousContentPage = document.getElementById("contentPage_" + previousPage);
 
-					previousNavigationItem.className = previousNavigationItem.className.replace(" navigationItemSelected", "");
-					previousContentPage.className += " hidden";
+					classmanager.removeClass(previousNavigationItem, "navigationItemSelected");
+					classmanager.addClass(previousContentPage, "hidden");
 				}
 
 				var navigationItem = document.getElementById("navigationItem_" + page);
 				var contentPage = document.getElementById("contentPage_" + page);
 
-				navigationItem.className += " navigationItemSelected";
-				contentPage.className = contentPage.className.replace(" hidden", "");
+				classmanager.addClass(navigationItem, "navigationItemSelected");
+				classmanager.removeClass(contentPage, "hidden");
 
 				contentTop.scrollIntoView(true);
 			}
@@ -195,7 +200,7 @@ define(function (require) {
 				sitemap.onContentHidden();
 			}
 
-			contentContainer.className += " hidden";
+			classmanager.addClass(contentContainer, "hidden");
 		}
 	}
 
@@ -208,14 +213,14 @@ define(function (require) {
 
 		var contentPage = document.createElement("div");
 		contentPage.id = "contentPage_" + page_;
-		contentPage.className = " contentPage hidden";
+		contentPage.className = "contentPage hidden";
 		contentPage.appendChild(pageContent.content);
 		style.innerHTML += " " + pageStyle.innerHTML;
 
 		contentContainer.appendChild(contentPage);
 
 		var navigationItem = document.createElement("div");
-		navigationItem.className = " navigationItem";
+		navigationItem.className = "navigationItem";
 		navigationItem.id = "navigationItem_" + page_;
 		navigationItem.innerHTML = page;
 		navigationItem.addEventListener("mousedown", function (event) {
@@ -226,7 +231,7 @@ define(function (require) {
 		}, false);
 
 		var navigationItemLine = document.createElement("div");
-		navigationItemLine.className = " navigationItemLine";
+		navigationItemLine.className = "navigationItemLine";
 		navigationItem.appendChild(navigationItemLine)
 
 		mainNavigationContainer.appendChild(navigationItem);
@@ -236,11 +241,7 @@ define(function (require) {
 	mobileNavigationButton.id = "mobileNavigationButton";
 
 	mobileNavigationButton.addEventListener("mousedown", function (event) {
-		if (mainNavigationContainer.style.left === "50px") {
-			mainNavigationContainer.style.left = "";
-		} else {
-			mainNavigationContainer.style.left = "50px";
-		}
+		classmanager.toggleClass(mainNavigationContainer, "expanded");
 	}, false);
 
 	sitemap.style = style;
@@ -249,15 +250,16 @@ define(function (require) {
 	sitemap.mobileNavigationButton = mobileNavigationButton;
 
 	sitemap.showNavigation = function () {
-		mainNavigationContainer.className = mainNavigationContainer.className.replace(" hidden", "");
-		mobileNavigationButton.className = mobileNavigationButton.className.replace(" hidden", "");
+		classmanager.removeClass(mainNavigationContainer, "hidden");
+		classmanager.removeClass(mobileNavigationButton, "hidden");
 	};
 
 	sitemap.hideNavigation = function () {
 		if (mainNavigationContainer.className.indexOf(" hidden") === -1) {
-			mainNavigationContainer.className += " hidden";
-			mobileNavigationButton.className += " hidden";
+			classmanager.addClass(mainNavigationContainer, "hidden");
+			classmanager.addClass(mobileNavigationButton, "hidden");
 		}
 	}
+
 	return sitemap;
 });
